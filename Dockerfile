@@ -10,12 +10,13 @@ RUN wget -q --output-document=perl-5.12.1.tar.gz http://www.cpan.org/src/5.0/per
 RUN tar xfz perl-5.12.1.tar.gz
 RUN rm --interactive=never perl-5.12.1.tar.gz
 WORKDIR perl-5.12.1
-RUN ./Configure -Dprefix=/data/apps -des
+RUN ./Configure -Dprefix=/app -des
 RUN make
 RUN make install
 WORKDIR /downloads
 RUN rm -rf perl-5.12.1
 
+ENV PATH "/app/bin:${PATH}"
 
 RUN cpan App::cpanminus
 
@@ -44,5 +45,7 @@ RUN cpanm Plack::Middleware::CrossOrigin Pod::Simple::HTML Regexp::Common Server
 RUN cpanm Text::CSV_XS Tie::IxHash URI::Encode UUID::Tiny XML::FeedPP XML::Hash::LX XML::Parser
 RUN cpanm Term::ProgressBar Term::ProgressBar::Quiet PerlX::Maybe Firebase::Auth Gravatar::URL
 
-RUN mkdir /app
-WORKDIR /app/bin
+RUN cpanm MooseX::App
+
+RUN mkdir /data/apps/wiki2git
+WORKDIR /data/apps/wiki2git/bin
